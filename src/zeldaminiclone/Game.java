@@ -26,7 +26,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		
 		world = new World();
 		final int initialPosition = 32;
-		player = new Player(world, initialPosition,initialPosition);
+		player = new Player(world, initialPosition, initialPosition);
 		
 	}
 	
@@ -35,7 +35,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	}
 	
 	private void render() {
-		makeBufferStrategy().ifPresent(bufferStrategy -> drawGraphics(bufferStrategy));
+		makeBufferStrategy().ifPresent((final BufferStrategy bufferStrategy) -> drawGraphics(bufferStrategy));
 	}
 	
 	private void drawGraphics(BufferStrategy bufferStrategy) {

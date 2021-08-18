@@ -48,26 +48,26 @@ public class World {
 	}
 	
 	private Block buildRightWall(int currentBlock) {
-		int positionXBlock = 0;
-		int positionYBlock = currentBlock * Block.SIZE;
+		final int positionXBlock = 0;
+		final int positionYBlock = currentBlock * Block.SIZE;
 		return new Block(positionXBlock, positionYBlock);
 	}
 	
 	private Block buildLeftWall(int currentBlock) {
-		int positionXBlock = Game.WIDTH - Block.SIZE;
-		int positionYBlock = currentBlock * Block.SIZE;
+		final int positionXBlock = Game.WIDTH - Block.SIZE;
+		final int positionYBlock = currentBlock * Block.SIZE;
 		return new Block(positionXBlock, positionYBlock);
 	}
 	
 	private Block buildTopWall(int currentBlock) {
-		int positionXBlock = currentBlock * Block.SIZE;
-		int positionYBlock = 0;
+		final int positionXBlock = currentBlock * Block.SIZE;
+		final int positionYBlock = 0;
 		return new Block(positionXBlock, positionYBlock);
 	}
 	
 	private Block buildBottomWall(int currentBlock) {
-		int positionXBlock = currentBlock * Block.SIZE;
-		int positionYBlock = Game.HEIGHT - Block.SIZE;
+		final int positionXBlock = currentBlock * Block.SIZE;
+		final int positionYBlock = Game.HEIGHT - Block.SIZE;
 		return new Block(positionXBlock, positionYBlock);
 	}
 }
