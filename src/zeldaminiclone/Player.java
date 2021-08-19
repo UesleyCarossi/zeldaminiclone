@@ -3,6 +3,8 @@ package zeldaminiclone;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
 public class Player extends Rectangle {
 	private static final long serialVersionUID = 1L;
@@ -14,10 +16,20 @@ public class Player extends Rectangle {
 	private boolean up, down, prioritizeFirstUp;
 	
 	private World world;
+	private BufferedImage spriteSheet;
+	private BufferedImage playerFront;
 	
 	public Player(World world, int positionX, int positionY) {
 		super(positionX, positionY, SIZE, SIZE);
 		this.world = world;
+		
+		try {
+			spriteSheet = SpriteSheet.loadSpriteSheet("/player_spritesheet.png");
+			playerFront = SpriteSheet.getSprite(spriteSheet, 1, 11, 16, 16);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	public void tick() {
@@ -73,8 +85,12 @@ public class Player extends Rectangle {
 	}
 	
 	public void render(Graphics graphics) {
-		graphics.setColor(Color.BLUE);
-		graphics.fillRect(x, y, width, height);
+		if (playerFront != null) {
+			graphics.drawImage(playerFront, x, y, width, height, null);
+		} else {
+			graphics.setColor(Color.BLUE);
+			graphics.fillRect(x, y, width, height);
+		}
 	}
 	
 	public void moveRight() {
