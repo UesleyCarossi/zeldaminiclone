@@ -15,4 +15,8 @@ public class SpriteSheet {
 		return sprite.getSubimage(positionX, positionY, width, height);
 	}
 	
+	public static BufferedImage getSprite(BufferedImage sprite, FramesAnimation framesAnimation) {
+		return sprite.getSubimage(framesAnimation.getX(), framesAnimation.getY(), framesAnimation.getWidth(), framesAnimation.getHeight());
+	}
+	
 }

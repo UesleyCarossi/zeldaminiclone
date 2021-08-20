@@ -15,7 +15,8 @@ import javax.swing.JFrame;
 public class Game extends Canvas implements Runnable, KeyListener {
 	private static final long serialVersionUID = 1L;
 	
-	public static final int WIDTH = 480, HEIGHT = 480;
+	public static final int WIDTH = 640, HEIGHT = 480;
+	public static final int SCALE = 3;
 	
 	private Player player;
 	private World world;
@@ -64,7 +65,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private void backgroundRender(Graphics graphics) {
 		final Color green = new Color(0,135,13);
 		graphics.setColor(green);
-		graphics.fillRect(0, 0, WIDTH, HEIGHT);
+		graphics.fillRect(0, 0, WIDTH*SCALE, HEIGHT*SCALE);
 	}
 
 	public static void main(String ...args) {

@@ -16,8 +16,12 @@ public class Player extends Rectangle {
 	private boolean up, down, prioritizeFirstUp;
 	
 	private World world;
+	
 	private BufferedImage spriteSheet;
-	private BufferedImage playerFront;
+	private BufferedImage[] playerFront;
+	private int currentAnimation = 0;
+	private int currentFrames = 0;
+	private int targetFrames = 15;
 	
 	public Player(World world, int positionX, int positionY) {
 		super(positionX, positionY, SIZE, SIZE);
@@ -25,7 +29,15 @@ public class Player extends Rectangle {
 		
 		try {
 			spriteSheet = SpriteSheet.loadSpriteSheet("/player_spritesheet.png");
-			playerFront = SpriteSheet.getSprite(spriteSheet, 1, 11, 16, 16);
+
+			PlayerFrontFrames[] playerFrontFrames = PlayerFrontFrames.values();
+			int lengthFramesAnimation = playerFrontFrames.length;
+			
+			playerFront = new BufferedImage[lengthFramesAnimation];
+			for (int i = 0; i < lengthFramesAnimation; i++) {
+				PlayerFrontFrames currentFrame = playerFrontFrames[i];
+				playerFront[i] = SpriteSheet.getSprite(spriteSheet, currentFrame);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -37,6 +49,9 @@ public class Player extends Rectangle {
 	}
 	
 	private void moviment() {
+		
+		final int originalX = x;
+		final int originalY = y;
 		
 		if (prioritizeFirstRight) {
 			if (right) {
@@ -82,11 +97,25 @@ public class Player extends Rectangle {
 			}
 		}
 		
+		movimentAnimation(originalX != x || originalY != y);
+	}
+	
+	private void movimentAnimation(boolean moved) {
+		if (moved) {
+			currentFrames++;
+			if(currentFrames == targetFrames) {
+				currentFrames = 0;
+				currentAnimation++;
+				if (currentAnimation == PlayerFrontFrames.values().length) {
+					currentAnimation = 0;
+				}
+			}
+		}
 	}
 	
 	public void render(Graphics graphics) {
 		if (playerFront != null) {
-			graphics.drawImage(playerFront, x, y, width, height, null);
+			graphics.drawImage(playerFront[currentAnimation], x, y, width, height, null);
 		} else {
 			graphics.setColor(Color.BLUE);
 			graphics.fillRect(x, y, width, height);

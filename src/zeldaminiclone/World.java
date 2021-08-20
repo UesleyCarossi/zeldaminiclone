@@ -37,13 +37,17 @@ public class World {
 	}
 	
 	private void buildWalls() {
-		final int maxBlocksDirection = 15;
+		final int maxBlocksDirectionX = Game.WIDTH / Block.SIZE;
+		final int maxBlocksDirectionY = Game.HEIGHT / Block.SIZE;
 		
-		for (int currentBlock = 0; currentBlock < maxBlocksDirection; currentBlock++) {
-			blocks.add(buildLeftWall(currentBlock));
+		for (int currentBlock = 0; currentBlock < maxBlocksDirectionX; currentBlock++) {
 			blocks.add(buildTopWall(currentBlock));
-			blocks.add(buildRightWall(currentBlock));
 			blocks.add(buildBottomWall(currentBlock));
+		}
+		
+		for (int currentBlock = 0; currentBlock < maxBlocksDirectionY; currentBlock++) {
+			blocks.add(buildLeftWall(currentBlock));
+			blocks.add(buildRightWall(currentBlock));
 		}
 	}
 	
