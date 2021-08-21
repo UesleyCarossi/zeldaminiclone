@@ -1,4 +1,6 @@
-package zeldaminiclone;
+package zeldaminiclone.animation;
+
+import zeldaminiclone.FramesAnimation;
 
 public enum PlayerFrontFrames implements FramesAnimation {
 	RIGHTY_STEP(1, 11, 16, 16),

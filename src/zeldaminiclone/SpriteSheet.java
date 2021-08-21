@@ -1,5 +1,7 @@
 package zeldaminiclone;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -16,7 +18,27 @@ public class SpriteSheet {
 	}
 	
 	public static BufferedImage getSprite(BufferedImage sprite, FramesAnimation framesAnimation) {
+		
+		BufferedImage castle = sprite.getSubimage(framesAnimation.getX(), framesAnimation.getY(), framesAnimation.getWidth(), framesAnimation.getHeight());
+		BufferedImage bufferedImage = sprite.getSubimage(framesAnimation.getX(), framesAnimation.getY(), framesAnimation.getWidth(), framesAnimation.getHeight());
+		
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-castle.getWidth(null), 0);
+		
+		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		bufferedImage = op.filter(bufferedImage, null);
+		
 		return sprite.getSubimage(framesAnimation.getX(), framesAnimation.getY(), framesAnimation.getWidth(), framesAnimation.getHeight());
+	}
+	
+	public static BufferedImage flip(BufferedImage sprite) {
+		AffineTransform affineTransform = AffineTransform.getScaleInstance(-1, 1);
+		affineTransform.translate(-sprite.getWidth(null), 0);
+		
+		AffineTransformOp affineTransformOp = new AffineTransformOp(affineTransform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		sprite = affineTransformOp.filter(sprite, null);
+		
+		return sprite;
 	}
 	
 }
