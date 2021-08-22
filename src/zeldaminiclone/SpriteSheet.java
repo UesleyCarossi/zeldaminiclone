@@ -18,16 +18,6 @@ public class SpriteSheet {
 	}
 	
 	public static BufferedImage getSprite(BufferedImage sprite, FramesAnimation framesAnimation) {
-		
-		BufferedImage castle = sprite.getSubimage(framesAnimation.getX(), framesAnimation.getY(), framesAnimation.getWidth(), framesAnimation.getHeight());
-		BufferedImage bufferedImage = sprite.getSubimage(framesAnimation.getX(), framesAnimation.getY(), framesAnimation.getWidth(), framesAnimation.getHeight());
-		
-		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-castle.getWidth(null), 0);
-		
-		AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-		bufferedImage = op.filter(bufferedImage, null);
-		
 		return sprite.getSubimage(framesAnimation.getX(), framesAnimation.getY(), framesAnimation.getWidth(), framesAnimation.getHeight());
 	}
 	
