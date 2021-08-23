@@ -11,7 +11,6 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -35,7 +34,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		
 		final int initialPositionEnemiesX = 576;
 		final int initialPositionEnemiesY = 416;
-		enemies.add(new Enemy(world, initialPositionEnemiesX, initialPositionEnemiesY));
 		enemies.add(new Enemy(world, initialPositionEnemiesX, initialPositionEnemiesY));
 		
 		final int initialPositionPlayer = 32;
@@ -104,9 +102,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	@Override
 	public void run() {
-		Random randomGenerator = new Random();
 		while(true) {
-			automaticControlEnemies(randomGenerator);
+			chasePlayer();
 			tick();
 			render();
 			limitFps();
@@ -122,35 +119,36 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		}
 	}
 	
-	private void automaticControlEnemies(Random randomGenerator) {
-		if (frames >= 60) {
-			frames = 0;
-			for (Enemy enemy : enemies) {
-				final int randomNumberHorizontal = randomGenerator.nextInt(4);
-				if (randomNumberHorizontal == 0)
-					enemy.moveRight();
-				else if (randomNumberHorizontal == 1)
-					enemy.moveLeft();
-				else if (randomNumberHorizontal == 2)
-					enemy.stopMoveRight();
-				else if (randomNumberHorizontal == 3)
-					enemy.stopMoveLeft();
-				
-				final int randomNumberVertical = randomGenerator.nextInt(4);
-				if (randomNumberVertical == 0)
-					enemy.moveUp();
-				else if (randomNumberVertical == 1)
-					enemy.moveDown();
-				else if (randomNumberVertical == 2)
-					enemy.stopMoveUp();
-				else if (randomNumberVertical == 3)
-					enemy.stopMoveDown();
-				
-				if (randomGenerator.nextInt(2) == 0)
+	private void chasePlayer() {
+		for (Enemy enemy : enemies) {
+			if (enemy.x < player.x)
+				enemy.moveRight();
+			else
+				enemy.stopMoveRight();
+			
+			if (enemy.x > player.x)
+				enemy.moveLeft();
+			else
+				enemy.stopMoveLeft();
+			
+			if (enemy.y < player.y)
+				enemy.moveDown();
+			else
+				enemy.stopMoveDown();
+			
+			if (enemy.y > player.y)
+				enemy.moveUp();
+			else
+				enemy.stopMoveUp();
+			
+			if (frames >= 60) {
+				if (enemy.x == player.x || enemy.y == player.y) {
 					enemy.shoot();
+					frames = 0;
+				}
 			}
+			
 		}
-		
 	}
 
 	@Override
