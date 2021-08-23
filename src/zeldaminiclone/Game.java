@@ -8,7 +8,10 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -18,21 +21,34 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static final int WIDTH = 640, HEIGHT = 480;
 	public static final int SCALE = 3;
 	
-	private Player player;
+	private int frames = 0;
+	
 	private World world;
+	private List<Enemy> enemies = new ArrayList<Enemy>();
+	private Player player;
 	
 	public Game() {
 		addKeyListener(this);
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		
 		world = new World();
-		final int initialPosition = 32;
-		player = new Player(world, initialPosition, initialPosition);
+		
+		final int initialPositionEnemiesX = 576;
+		final int initialPositionEnemiesY = 416;
+		enemies.add(new Enemy(world, initialPositionEnemiesX, initialPositionEnemiesY));
+		enemies.add(new Enemy(world, initialPositionEnemiesX, initialPositionEnemiesY));
+		
+		final int initialPositionPlayer = 32;
+		player = new Player(world, initialPositionPlayer, initialPositionPlayer);
 		
 	}
 	
 	public void tick() {
+		frames++;
 		player.tick();
+		for (Enemy enemy : enemies) {
+			enemy.tick();
+		}
 	}
 	
 	private void render() {
@@ -49,6 +65,9 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		backgroundRender(graphics);
 		world.render(graphics);
 		player.render(graphics);
+		for (Enemy enemy : enemies) {
+			enemy.render(graphics);
+		}
 	}
 	
 	
@@ -85,7 +104,9 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	
 	@Override
 	public void run() {
+		Random randomGenerator = new Random();
 		while(true) {
+			automaticControlEnemies(randomGenerator);
 			tick();
 			render();
 			limitFps();
@@ -99,6 +120,37 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		} catch (InterruptedException interruptedException) {
 			interruptedException.printStackTrace();
 		}
+	}
+	
+	private void automaticControlEnemies(Random randomGenerator) {
+		if (frames >= 60) {
+			frames = 0;
+			for (Enemy enemy : enemies) {
+				final int randomNumberHorizontal = randomGenerator.nextInt(4);
+				if (randomNumberHorizontal == 0)
+					enemy.moveRight();
+				else if (randomNumberHorizontal == 1)
+					enemy.moveLeft();
+				else if (randomNumberHorizontal == 2)
+					enemy.stopMoveRight();
+				else if (randomNumberHorizontal == 3)
+					enemy.stopMoveLeft();
+				
+				final int randomNumberVertical = randomGenerator.nextInt(4);
+				if (randomNumberVertical == 0)
+					enemy.moveUp();
+				else if (randomNumberVertical == 1)
+					enemy.moveDown();
+				else if (randomNumberVertical == 2)
+					enemy.stopMoveUp();
+				else if (randomNumberVertical == 3)
+					enemy.stopMoveDown();
+				
+				if (randomGenerator.nextInt(2) == 0)
+					enemy.shoot();
+			}
+		}
+		
 	}
 
 	@Override
